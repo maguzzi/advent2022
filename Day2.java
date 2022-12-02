@@ -9,17 +9,14 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Day2 {
-    public static void main(String[] args) throws IOException {
+public class Day2 extends Util {
+    public static void main(String[] args) throws Exception {
         new Day2();
     }
 
-    Map<String, Integer> moves = new HashMap<>();
+    static Map<String, Integer> moves = new HashMap<>();
 
-    public Day2() throws IOException {
-        System.out.println(new File(".").getAbsolutePath());
-        LineInputStream lis = new LineInputStream(Files.newInputStream(Paths.get("./src/main/resources/day2.input.real")));
-
+    static {
         // PART 1
         //        moves.put("AX", 1 + 3);     // rock rock - draw
         //        moves.put("AY", 2 + 6);     // rock paper - won
@@ -42,21 +39,22 @@ public class Day2 {
         moves.put("CY", 3 + 3);     // scissor draw - scissor
         moves.put("CZ", 1 + 6);     // scissors win - rock
 
-        int sum = 0;
+    }
 
-        String line = lis.readLine();
-        while (line != null) {
-            Scanner s = new Scanner(line);
-            String elf = s.next("\\w");
-            String me = s.next("\\w");
-            System.out.println("elf :" + elf + " me: " + me);
-            sum += moves.get(elf + me);
-            line = lis.readLine();
-        }
+    int sum = 0;
 
+    public Day2() throws Exception {
+        doWork("./src/main/resources/day2.input.real");
         System.out.println(sum);
-
     }
 
 
+    @Override
+    public void doWorkOnLine(String line) {
+        Scanner s = new Scanner(line);
+        String elf = s.next("\\w");
+        String me = s.next("\\w");
+        System.out.println("elf :" + elf + " me: " + me);
+        sum += moves.get(elf + me);
+    }
 }

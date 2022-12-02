@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 
-public class Day1 {
+public class Day1 extends Util {
 
     LinkedList<Integer> tops = new LinkedList<Integer>();
     int max = 0;
@@ -17,29 +17,12 @@ public class Day1 {
 
     int top_size=3;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         new Day1();
     }
 
-    public Day1() throws IOException {
-        System.out.println(new File(".").getAbsolutePath());
-        LineInputStream lis = new LineInputStream(Files.newInputStream(Paths.get("./src/main/resources/day1.input.real")));
-
-
-        String line = lis.readLine();
-        while (line != null) {
-            if (line.equals("")) {
-                if (sum > max) {
-                    changeMax();
-                }
-                sum = 0;
-                elf++;
-            } else {
-                sum += Integer.parseInt(line);
-                System.out.println("elf: " + elf + " sum: " + sum);
-            }
-            line = lis.readLine();
-        }
+    public Day1() throws Exception {
+        doWork("./src/main/resources/day1.input");
         System.out.println("\nelf: " + max_elf + " max: " + max);
         System.out.println("sum top "+top_size+": "+ tops.stream().mapToInt(i -> i).sum());
 
@@ -55,5 +38,19 @@ public class Day1 {
         System.out.println("elf: " + elf + " max: " + max);
         System.out.println("tops "+tops);
 
+    }
+
+    @Override
+    public void doWorkOnLine(String line) {
+        if (line.equals("")) {
+            if (sum > max) {
+                changeMax();
+            }
+            sum = 0;
+            elf++;
+        } else {
+            sum += Integer.parseInt(line);
+            System.out.println("elf: " + elf + " sum: " + sum);
+        }
     }
 }
