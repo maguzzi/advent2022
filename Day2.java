@@ -1,11 +1,4 @@
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -14,47 +7,56 @@ public class Day2 extends Util {
         new Day2();
     }
 
-    static Map<String, Integer> moves = new HashMap<>();
+    static Map<String, Integer> movesOne = new HashMap<>();
+    static Map<String, Integer> movesTwo = new HashMap<>();
 
     static {
         // PART 1
-        //        moves.put("AX", 1 + 3);     // rock rock - draw
-        //        moves.put("AY", 2 + 6);     // rock paper - won
-        //        moves.put("AZ", 3 + 0);     // rock scissors - lost
-        //        moves.put("BX", 1 + 0);     // paper rock - lost
-        //        moves.put("BY", 2 + 3);     // paper paper - draw
-        //        moves.put("BZ", 3 + 6);     // paper scissors - won
-        //        moves.put("CX", 1 + 6);     // scissor rock - won
-        //        moves.put("CY", 2 + 0);     // scissor paper - lost
-        //        moves.put("CZ", 3 + 3);     // scissors scissors - draw
+        movesOne.put("AX", 1 + 3);     // rock rock - draw
+        movesOne.put("AY", 2 + 6);     // rock paper - won
+        movesOne.put("AZ", 3 + 0);     // rock scissors - lost
+        movesOne.put("BX", 1 + 0);     // paper rock - lost
+        movesOne.put("BY", 2 + 3);     // paper paper - draw
+        movesOne.put("BZ", 3 + 6);     // paper scissors - won
+        movesOne.put("CX", 1 + 6);     // scissor rock - won
+        movesOne.put("CY", 2 + 0);     // scissor paper - lost
+        movesOne.put("CZ", 3 + 3);     // scissors scissors - draw
 
         // PART 2
-        moves.put("AX", 3 + 0);     // rock lose - scissor
-        moves.put("AY", 1 + 3);     // rock draw - rock
-        moves.put("AZ", 2 + 6);     // rock win - paper
-        moves.put("BX", 1 + 0);     // paper lose - rock
-        moves.put("BY", 2 + 3);     // paper draw - paper
-        moves.put("BZ", 3 + 6);     // paper win - scissor
-        moves.put("CX", 2 + 0);     // scissor lose - paper
-        moves.put("CY", 3 + 3);     // scissor draw - scissor
-        moves.put("CZ", 1 + 6);     // scissors win - rock
+        movesTwo.put("AX", 3 + 0);     // rock lose - scissor
+        movesTwo.put("AY", 1 + 3);     // rock draw - rock
+        movesTwo.put("AZ", 2 + 6);     // rock win - paper
+        movesTwo.put("BX", 1 + 0);     // paper lose - rock
+        movesTwo.put("BY", 2 + 3);     // paper draw - paper
+        movesTwo.put("BZ", 3 + 6);     // paper win - scissor
+        movesTwo.put("CX", 2 + 0);     // scissor lose - paper
+        movesTwo.put("CY", 3 + 3);     // scissor draw - scissor
+        movesTwo.put("CZ", 1 + 6);     // scissors win - rock
 
     }
 
     int sum = 0;
 
     public Day2() throws Exception {
-        doWork("./src/main/resources/day2.input.real");
+        doWork("./src/main/resources/day2.input.real", 1);
         System.out.println(sum);
+        sum = 0;
+        doWork("./src/main/resources/day2.input.real", 2);
+        System.out.println(sum);
+
     }
 
 
     @Override
-    public void doWorkOnLine(String line) {
+    public void doWorkOnLine(String line, int step) {
         Scanner s = new Scanner(line);
         String elf = s.next("\\w");
         String me = s.next("\\w");
-        System.out.println("elf :" + elf + " me: " + me);
-        sum += moves.get(elf + me);
+        // System.out.println("elf :" + elf + " me: " + me);
+        if (step==1) {
+            sum += movesOne.get(elf + me);
+        } else if (step==2) {
+            sum += movesTwo.get(elf + me);
+        }
     }
 }

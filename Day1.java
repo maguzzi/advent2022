@@ -1,9 +1,3 @@
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 
 public class Day1 extends Util {
@@ -22,7 +16,7 @@ public class Day1 extends Util {
     }
 
     public Day1() throws Exception {
-        doWork("./src/main/resources/day1.input");
+        doWork("./src/main/resources/day1.input.real",1);
         System.out.println("\nelf: " + max_elf + " max: " + max);
         System.out.println("sum top "+top_size+": "+ tops.stream().mapToInt(i -> i).sum());
 
@@ -41,7 +35,7 @@ public class Day1 extends Util {
     }
 
     @Override
-    public void doWorkOnLine(String line) {
+    public void doWorkOnLine(String line,int step) {
         if (line.equals("")) {
             if (sum > max) {
                 changeMax();
