@@ -18,6 +18,7 @@ public abstract class Util {
             while (line != null) {
                 doWorkOnLine(line,step);
                 line = lis.readLine();
+                System.out.println();
             }
 
         } catch (Exception e) {
