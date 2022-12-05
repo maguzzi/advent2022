@@ -16,6 +16,7 @@ public abstract class Util {
 
             String line = lis.readLine();
             while (line != null) {
+                System.out.print(line + " ");
                 doWorkOnLine(line,step);
                 line = lis.readLine();
                 System.out.println();

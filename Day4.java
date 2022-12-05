@@ -25,7 +25,6 @@ public class Day4 extends Util {
 
     @Override
     public void doWorkOnLine(String line, int step) {
-        System.out.print(line+" ");
         Scanner s = new Scanner(line);
         s.useDelimiter("[,-]");
         int a = s.nextInt();

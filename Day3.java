@@ -22,7 +22,6 @@ public class Day3 extends Util {
 
     @Override
     public void doWorkOnLine(String line, int step) {
-        System.out.print("origin :" + line + " ");
         if (step == 1) {
             String firstHalf = line.substring(0, line.length() / 2);
             String secondHalf = line.substring(line.length() / 2, line.length());
