@@ -60,14 +60,14 @@ public class Day1 extends Util implements Quiz {
         elf = 1;
         tops.clear();
         doWork(getFileName(), 1);
-        result.setStep1((Integer) tops.stream().mapToInt(it -> it).sum() +"");
+        result.setStep1((Integer) tops.stream().mapToInt(it -> it).sum() + "");
         max = 0;
         max_elf = 1;
         sum = 0;
         elf = 1;
         tops.clear();
         doWork(getFileName(), 2);
-        result.setStep2((Integer) tops.stream().mapToInt(it -> it).sum() +"");
+        result.setStep2((Integer) tops.stream().mapToInt(it -> it).sum() + "");
         return result;
     }
 }

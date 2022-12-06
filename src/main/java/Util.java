@@ -5,15 +5,15 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public abstract class Util {
+abstract class Util {
 
-    protected Mode mode;
+    Mode mode;
 
-    protected Util(Mode mode) {
+    Util(Mode mode) {
         this.mode = mode;
     }
 
-    public void doWork(String inputPath, int step) throws Exception {
+    void doWork(String inputPath, int step) throws Exception {
         long t0 = new Date().getTime();
         LineInputStream lis = new LineInputStream(Files.newInputStream(Paths.get(inputPath)));
 
