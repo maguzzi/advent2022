@@ -5,15 +5,18 @@ import java.util.Scanner;
 
 import static java.util.Arrays.stream;
 
-public class Day5 extends Util {
+public class Day5 extends Util implements Quiz {
 
-    private static final int CONTAINER_NUMBER = 3;
+    private static final int CONTAINER_NUMBER_EXAMPLE = 3;
+    private static final int CONTAINER_NUMBER_REAL = 9;
 
-
-    static private final LinkedList<String>[] containers = new LinkedList[CONTAINER_NUMBER];
+    static private LinkedList<String>[] containers;
 
     static void init(Mode mode) {
-        for (int i = 0; i < CONTAINER_NUMBER; i++) {
+
+        containers = new LinkedList[(Mode.EXAMPLE.equals(mode)?CONTAINER_NUMBER_EXAMPLE:CONTAINER_NUMBER_REAL)];
+
+        for (int i = 0; i < (Mode.EXAMPLE.equals(mode)?CONTAINER_NUMBER_EXAMPLE:CONTAINER_NUMBER_REAL); i++) {
             containers[i] = new LinkedList<>();
         }
 
@@ -38,45 +41,26 @@ public class Day5 extends Util {
 
     }
 
-
-    public static void main(String[] args) throws Exception {
-        new Day5();
+    Day5(Mode mode) {
+        super(mode);
     }
 
-
-    public Day5() throws Exception {
-
-        init(Mode.EXAMPLE);
-
-        render();
-
-        doWork("./src/main/resources/day5.input", 1);
-
-        printAns();
-
-        init(Mode.EXAMPLE);
-
-        doWork("./src/main/resources/day5.input", 2);
-
-        printAns();
-
-    }
-
-    private void printAns() {
-        StringBuilder ans = new StringBuilder("");
-        for (int i = 0; i < CONTAINER_NUMBER; i++) {
+    private String getAns() {
+        StringBuilder ans = new StringBuilder();
+        for (int i = 0; i < (Mode.EXAMPLE.equals(mode)?CONTAINER_NUMBER_EXAMPLE:CONTAINER_NUMBER_REAL); i++) {
             ans.append(containers[i].getLast());
         }
-        System.out.println(ans);
-
+        return ans.toString();
     }
 
     private void render() {
-        System.out.println("\n************");
-        for (int i = 0; i < CONTAINER_NUMBER; i++) {
-            System.out.println((i + 1) + " " + containers[i]);
+        if (Mode.EXAMPLE.equals(mode)) {
+            System.out.println("\n************");
+            for (int i = 0; i < (Mode.EXAMPLE.equals(mode) ? CONTAINER_NUMBER_EXAMPLE : CONTAINER_NUMBER_REAL); i++) {
+                System.out.println((i + 1) + " " + containers[i]);
+            }
+            System.out.println("************");
         }
-        System.out.println("************");
 
     }
 
@@ -117,6 +101,18 @@ public class Day5 extends Util {
         render();
     }
 
+    @Override
+    public Result run() throws Exception {
+        Result result = new Result();
+        init(mode);
+        render();
+        doWork(getFileName(), 1);
+        result.setStep1(getAns());
+        init(mode);
+        doWork(getFileName(), 2);
+        result.setStep2(getAns());
+        return result;
+    }
 }
 
 class ParsedLine {

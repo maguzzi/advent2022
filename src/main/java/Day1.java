@@ -1,6 +1,9 @@
 import java.util.LinkedList;
 
-public class Day1 extends Util {
+public class Day1 extends Util implements Quiz {
+
+    private static final int TOPS_SIZE_STEP_1 = 1;
+    private static final int TOPS_SIZE_STEP_2 = 3;
 
     LinkedList<Integer> tops = new LinkedList<Integer>();
     int max = 0;
@@ -9,47 +12,62 @@ public class Day1 extends Util {
     int sum = 0;
     int elf = 1;
 
-    int top_size=3;
-
-    public static void main(String[] args) throws Exception {
-        new Day1();
+    Day1(Mode mode) {
+        super(mode);
     }
 
-    public Day1() throws Exception {
-        doWork("./src/main/resources/day1.input.real",1);
-        System.out.println("\nelf: " + max_elf + " max: " + max);
-        System.out.println("sum top "+top_size+": "+ tops.stream().mapToInt(i -> i).sum());
-
-    }
-
-    private void changeMax() {
+    private void changeMax(int step) {
         max = sum;
         max_elf = elf;
-        if (tops.size()==top_size) {
+        if (tops.size() == (step == 1 ? TOPS_SIZE_STEP_1 : TOPS_SIZE_STEP_2)) {
             tops.removeLast();
         }
         tops.push(max);
-        System.out.println("elf: " + elf + " max: " + max);
-        System.out.println("tops "+tops);
+        if (Mode.EXAMPLE.equals(mode)) {
+            System.out.println(tops);
+        }
 
     }
 
     @Override
     public void doWorkOnLineStep1(String line) {
+        innerRun(line, 1);
+    }
+
+    @Override
+    void doWorkOnLineStep2(String line) {
+        innerRun(line, 2);
+    }
+
+    private void innerRun(String line, int step) {
         if (line.equals("")) {
             if (sum > max) {
-                changeMax();
+                changeMax(step);
             }
             sum = 0;
             elf++;
         } else {
             sum += Integer.parseInt(line);
-            System.out.println("elf: " + elf + " sum: " + sum);
         }
     }
 
     @Override
-    void doWorkOnLineStep2(String line) {
-
+    public Result run() throws Exception {
+        Result result = new Result();
+        max = 0;
+        max_elf = 1;
+        sum = 0;
+        elf = 1;
+        tops.clear();
+        doWork(getFileName(), 1);
+        result.setStep1((Integer) tops.stream().mapToInt(it -> it).sum() +"");
+        max = 0;
+        max_elf = 1;
+        sum = 0;
+        elf = 1;
+        tops.clear();
+        doWork(getFileName(), 2);
+        result.setStep2((Integer) tops.stream().mapToInt(it -> it).sum() +"");
+        return result;
     }
 }

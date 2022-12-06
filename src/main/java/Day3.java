@@ -3,24 +3,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Day3 extends Util {
+public class Day3 extends Util implements Quiz {
 
     int sum = 0;
     private List<String> list = new ArrayList<>();
 
-    public static void main(String[] args) throws Exception {
-        new Day3();
+    Day3(Mode mode) {
+        super(mode);
     }
-
-
-    public Day3() throws Exception {
-        doWork("./src/main/resources/day3.input.real", 1);
-        System.out.println("sum " + sum);
-        sum = 0;
-        doWork("./src/main/resources/day3.input.real", 2);
-        System.out.println("sum " + sum);
-    }
-
 
     @Override
     public void doWorkOnLineStep1(String line) {
@@ -30,10 +20,7 @@ public class Day3 extends Util {
         List<Character> x = charInCommon(firstHalf, secondHalf);
         if (!x.isEmpty()) {
             int p = getPriority(x.get(0));
-            System.out.println("found " + x + "(" + p + ") in common");
             sum += p;
-        } else {
-            System.out.println("found no char in common");
         }
     }
 
@@ -45,11 +32,8 @@ public class Day3 extends Util {
             List<Character> y = charInCommon(list.get(1), list.get(2));
             List<Character> z = charInCommon(list.get(0), list.get(2));
             Optional<Character> collect = x.stream().filter(y::contains).filter(z::contains).findFirst();
-            System.out.println(x + " " + y + " " + z + " " + collect.get());
             sum += getPriority(collect.get());
             list.clear();
-        } else {
-            System.out.println();
         }
     }
 
@@ -70,5 +54,16 @@ public class Day3 extends Util {
         } else {
             return x - 'A' + 27;
         }
+    }
+
+    @Override
+    public Result run() throws Exception {
+        Result result = new Result();
+        doWork(getFileName(), 1);
+        result.setStep1(sum+"");
+        sum = 0;
+        doWork(getFileName(), 2);
+        result.setStep2(sum+"");
+        return result;
     }
 }

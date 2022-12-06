@@ -2,30 +2,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Day4 extends Util {
+public class Day4 extends Util implements Quiz {
 
     int sum = 0;
     private List<String> list = new ArrayList<>();
 
-    public static void main(String[] args) throws Exception {
-        new Day4();
+    Day4(Mode mode) {
+        super(mode);
     }
-
-
-    public Day4() throws Exception {
-        doWork("./src/main/resources/day4.input.real", 1);
-        System.out.println("sum " + sum);
-        sum = 0;
-        doWork("./src/main/resources/day4.input.real", 2);
-        System.out.println("sum " + sum);
-    }
-
 
     @Override
     public void doWorkOnLineStep1(String line) {
         Day4ParsedLine l = parseLine(line);
         if ((l.a >= l.c && l.b <= l.d) || (l.c >= l.a && l.d <= l.b)) {
-            System.out.print("*");
             sum++;
         }
     }
@@ -33,7 +22,6 @@ public class Day4 extends Util {
     public void doWorkOnLineStep2(String line) {
         Day4ParsedLine l = parseLine(line);
         if ((l.b >= l.c && l.c >= l.a) || (l.a >= l.c && l.d >= l.a)) {
-            System.out.print("*");
             sum++;
         }
     }
@@ -49,6 +37,16 @@ public class Day4 extends Util {
         return day4ParsedLine;
     }
 
+    @Override
+    public Result run() throws Exception {
+        Result result = new Result();
+        doWork(getFileName(), 1);
+        result.setStep1(sum+"");
+        sum = 0;
+        doWork(getFileName(), 2);
+        result.setStep2(sum+"");
+        return result;
+    }
 }
 
 class Day4ParsedLine {

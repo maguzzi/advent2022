@@ -2,10 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Day2 extends Util {
-    public static void main(String[] args) throws Exception {
-        new Day2();
-    }
+public class Day2 extends Util implements Quiz {
 
     static Map<String, Integer> movesOne = new HashMap<>();
     static Map<String, Integer> movesTwo = new HashMap<>();
@@ -37,15 +34,9 @@ public class Day2 extends Util {
 
     int sum = 0;
 
-    public Day2() throws Exception {
-        doWork("./src/main/resources/day2.input.real", 1);
-        System.out.println(sum);
-        sum = 0;
-        doWork("./src/main/resources/day2.input.real", 2);
-        System.out.println(sum);
-
+    Day2(Mode mode) {
+        super(mode);
     }
-
 
     @Override
     public void doWorkOnLineStep1(String line) {
@@ -63,4 +54,16 @@ public class Day2 extends Util {
         sum += movesTwo.get(elf + me);
 
     }
+
+    @Override
+    public Result run() throws Exception {
+        Result result = new Result();
+        doWork(getFileName(), 1);
+        result.setStep1(sum+"");
+        sum = 0;
+        doWork(getFileName(), 2);
+        result.setStep2(sum+"");
+        return result;
+    }
+
 }
