@@ -1,13 +1,13 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class Day7 extends Util implements Quiz {
 
-    LinkedList<Folder> folderStackIn = new LinkedList<>();
-    LinkedList<Folder> folderStackOut = new LinkedList<>();
-
-    Folder currentFolder;
+    Folder root=new Folder("/",0);
+    Folder currentFolder = root;
 
     Day7(Mode mode) {
         super(mode);
@@ -21,24 +21,31 @@ public class Day7 extends Util implements Quiz {
             String commandName = s.next();
             if (commandName.equals("cd")) {
                 String folderName = s.next();
-                if (folderName.equals("..")) {
-                    currentFolder = folderStackIn.pop();
-                    folderStackOut.push(currentFolder);
-                } else {
-                    currentFolder = new Folder(folderName, 0);
-                    folderStackIn.push(currentFolder);
+                if (!folderName.equals("..") && !folderName.equals("/")) {
+                    currentFolder = currentFolder.children.stream().filter(it -> it.name.equals(folderName)).limit(1).collect(Collectors.toList()).get(0);
+                    log("moved to "+currentFolder.name);
+                } else if (folderName.equals("..")) {
+                    currentFolder = currentFolder.parent;
+                    log("back to "+currentFolder.name);
                 }
-                log("current folder: " + currentFolder);
-
             }
         } else if (line.matches("^[0-9]+ .*")) {
             Scanner s = new Scanner(line);
-            int fileSize = s.nextInt();
-            log("increment\n");
-            folderStackIn.forEach(f -> {
-                f.incSize(fileSize);
-                log("\"" + f.getName() + "\" (" + fileSize + ")");
-            });
+            int delta = s.nextInt();
+            currentFolder.incSize(delta);
+            Folder parent = currentFolder.parent;
+            while(parent!=null) {
+                parent.incSize(delta);
+                parent=parent.parent;
+            }
+
+        } else if (line.startsWith("dir ")) {
+            String folderName = line.substring(4);
+            Folder f = new Folder(folderName, 0);
+            if (f.children.stream().noneMatch(it -> it.name.equals(folderName))) {
+                currentFolder.addChild(currentFolder,f);
+                log("added " + f.name + " to " + currentFolder.name);
+            }
         }
     }
 
@@ -49,73 +56,79 @@ public class Day7 extends Util implements Quiz {
 
     @Override
     public Result run() throws Exception {
-
         Result result = new Result();
-        folderStackIn.clear();
-        folderStackOut.clear();
         doWork(getFileName(), 1);
+        AtomicInteger sum = new AtomicInteger(0);
+        log("****** print tree *********\n");
+        printTree(root,0);
+        log("***************************\n");
 
-        log("folderStackIn: " + folderStackIn.toString());
-        log("folderStackOut: " + folderStackOut.toString());
+        getSumOfFolderUnder(100000,root,sum);
+        result.setStep1(sum+"");
 
-        AtomicInteger sum = new AtomicInteger();
-
-        folderStackIn.forEach(it -> {
-            if (it.size <= 100000) {
-                sum.addAndGet(it.size);
-            }
-        });
-        folderStackOut.forEach(it -> {
-            if (it.size <= 100000) {
-                sum.addAndGet(it.size);
-            }
-        });
-        result.setStep1(sum.get() + "");
-
-/*******************************************************/
-
-        int usedSpace = folderStackIn.getLast().size;
-        log("used space = " + usedSpace);
+        log("used space: "+root.size+"\n");
+        log("free space: "+(70000000-root.size)+"\n");
+        log("least folder size: "+(30000000-((70000000-root.size)))+"\n");
 
         AtomicInteger min = new AtomicInteger(Integer.MAX_VALUE);
 
-        folderStackIn.forEach(it -> {
-            if (usedSpace - it.size <= 30000000) {
-                log("folder " + it.getName() + " is ok");
-                if (it.getSize() <= min.get()) {
-                    min.set(it.size);
-                }
-            }
-        });
-
-        folderStackOut.forEach(it -> {
-            if (usedSpace - it.size <= 30000000) {
-                log("folder " + it.getName() + " is ok");
-                if (it.getSize() <= min.get()) {
-                    min.set(it.size);
-                }
-            }
-        });
-
-        result.setStep2(min.get() + "");
+        getFolderToDelete((30000000-((70000000-root.size))),root,min);
 
         return result;
     }
 
+    private void getFolderToDelete(int minSize,Folder root,AtomicInteger min) {
+        if (root.size>minSize) {
+            if (root.size<min.get()) {
+                System.out.println("folder "+root.name+" - "+root.size+" is ok");
+                min.set(root.size);
+            }
+        }
+        for (Folder c : root.children) {
+            getFolderToDelete(minSize,c,min);
+        }
+
+    }
+
+    private void getSumOfFolderUnder(int minSize,Folder root,AtomicInteger sum) {
+        if (root.size<minSize) {
+            sum.addAndGet(root.size);
+        }
+        for (Folder c : root.children) {
+            getSumOfFolderUnder(minSize,c,sum);
+        }
+
+    }
+
+    private void printTree(Folder currentFolder,int spaces) {
+        for (int i=0;i<spaces;i++) {
+            System.out.print(" ");
+        }
+        System.out.println(currentFolder.name + " - " + currentFolder.size);
+        currentFolder.children.forEach(it->printTree(it,spaces+1));
+    }
+
     private void log(String log) {
-        //if (mode.equals(Mode.EXAMPLE)) {
-        System.out.print(log);
-        //}
+        if (mode.equals(Mode.EXAMPLE)) {
+            System.out.print(log);
+        }
     }
 }
 
 class Folder {
+    Folder parent=null;
     String name;
     int size;
+    List<Folder> children = new ArrayList<>();
 
     public Folder(String name, int size) {
         this.name = name;
         this.size = size;
+    }
+
+    public void addChild(Folder parent,Folder folder) {
+        folder.parent=parent;
+        children.add(folder);
     }
 
     public void incSize(int delta) {
