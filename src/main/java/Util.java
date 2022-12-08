@@ -14,6 +14,10 @@ abstract class Util {
     }
 
     void doWork(String inputPath, int step) throws Exception {
+        doWork(inputPath,step,Boolean.TRUE);
+    }
+
+    void doWork(String inputPath, int step,Boolean printInput) throws Exception {
         long t0 = new Date().getTime();
         LineInputStream lis = new LineInputStream(Files.newInputStream(Paths.get(inputPath)));
 
@@ -21,7 +25,7 @@ abstract class Util {
 
             String line = lis.readLine();
             while (line != null) {
-                if (Mode.EXAMPLE.equals(mode)) {
+                if (Mode.EXAMPLE.equals(mode) && printInput) {
                     System.out.print(line + " ");
                 }
                 if (step == 1) {
@@ -31,7 +35,7 @@ abstract class Util {
                 }
 
                 line = lis.readLine();
-                if (Mode.EXAMPLE.equals(mode)) {
+                if (Mode.EXAMPLE.equals(mode) && printInput) {
                     System.out.println();
                 }
             }
@@ -51,5 +55,11 @@ abstract class Util {
 
     String getFileName() {
         return "src/main/resources/" + getClass().getSimpleName().toLowerCase() + ".input." + mode.name().toLowerCase();
+    }
+
+    void log(String log) {
+        if (mode.equals(Mode.EXAMPLE)) {
+            System.out.print(log);
+        }
     }
 }

@@ -108,11 +108,6 @@ public class Day7 extends Util implements Quiz {
         currentFolder.children.forEach(it->printTree(it,spaces+1));
     }
 
-    private void log(String log) {
-        if (mode.equals(Mode.EXAMPLE)) {
-            System.out.print(log);
-        }
-    }
 }
 
 class Folder {
