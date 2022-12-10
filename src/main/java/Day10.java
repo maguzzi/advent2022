@@ -121,7 +121,7 @@ public class Day10 extends Util implements Quiz {
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 40; j++) {
-                monitor[i][j] = '.';
+                monitor[i][j] = ' '; // the solution should be more readable
             }
         }
 
@@ -136,7 +136,10 @@ public class Day10 extends Util implements Quiz {
 
     private void drawCRT() {
         for (int i = 0; i < 6; i++) {
-            drawCRTLine(i);
+            for (int j = 0; j < 40; j++) {
+                System.out.print(monitor[i][j]+"");
+            }
+            System.out.println();
         }
     }
 
