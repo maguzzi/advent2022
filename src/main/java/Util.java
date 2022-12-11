@@ -1,9 +1,9 @@
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
-
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 abstract class Util {
 
@@ -19,12 +19,10 @@ abstract class Util {
 
     void doWork(String inputPath, int step,Boolean printInput) throws Exception {
         long t0 = new Date().getTime();
-        LineInputStream lis = new LineInputStream(Files.newInputStream(Paths.get(inputPath)));
+        List<String> lines = Files.readAllLines(Paths.get(inputPath));
 
         try {
-
-            String line = lis.readLine();
-            while (line != null) {
+            for (String line : lines) {
                 if (Mode.EXAMPLE.equals(mode) && printInput) {
                     System.out.print(line + " ");
                 }
@@ -34,7 +32,6 @@ abstract class Util {
                     doWorkOnLineStep2(line);
                 }
 
-                line = lis.readLine();
                 if (Mode.EXAMPLE.equals(mode) && printInput) {
                     System.out.println();
                 }
@@ -43,7 +40,6 @@ abstract class Util {
         } catch (Exception e) {
             throw e;
         } finally {
-            lis.close();
             long t1 = new Date().getTime();
             System.out.println("mode: " + mode + " step: " + step + " elapsed: " + new SimpleDateFormat("mm:ss.SSS").format(new Date(t1 - t0)));
         }

@@ -21,8 +21,6 @@ public class Day10 extends Util implements Quiz {
         Scanner s = new Scanner(line);
         String command = s.next();
 
-
-
         spritePosition.clear();
         spritePosition();
 
