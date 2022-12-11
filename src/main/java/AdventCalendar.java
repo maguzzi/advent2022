@@ -15,9 +15,11 @@ public class AdventCalendar {
         quizzes.add(new Day7(Mode.REAL));
         quizzes.add(new Day8(Mode.REAL));
         */
-        // quizzes.add(new Day9(Mode.EXAMPLE));
+        quizzes.add(new Day9(Mode.EXAMPLE));
 
+        /*
         quizzes.add(new Day10(Mode.REAL));
+         */
 
 
         quizzes.forEach(q -> {
