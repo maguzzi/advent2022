@@ -15,11 +15,12 @@ public class AdventCalendar {
         quizzes.add(new Day7(Mode.REAL));
         quizzes.add(new Day8(Mode.REAL));
         */
-        // quizzes.add(new Day9(Mode.EXAMPLE));
+        // quizzes.add(new Day9(Mode.EXAMPLE)); 0 stars
         /*
         quizzes.add(new Day10(Mode.REAL));
         */
-        quizzes.add(new Day11(Mode.EXAMPLE));
+        // quizzes.add(new Day11(Mode.EXAMPLE)); 1 star
+        quizzes.add(new Day12(Mode.EXAMPLE));
 
         quizzes.forEach(q -> {
             System.out.println("*** " + q.getClass().getSimpleName() + " ***");

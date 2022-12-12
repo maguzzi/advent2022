@@ -9,6 +9,10 @@ abstract class Util {
 
     Mode mode;
 
+    int inputWidth;
+    int inputHeight;
+    int lineIdx = 0;
+
     Util(Mode mode) {
         this.mode = mode;
     }
@@ -20,17 +24,21 @@ abstract class Util {
     void doWork(String inputPath, int step,Boolean printInput) throws Exception {
         long t0 = new Date().getTime();
         List<String> lines = Files.readAllLines(Paths.get(inputPath));
-
+        inputWidth = lines.get(0).length();
+        inputHeight = lines.size();
         try {
             for (String line : lines) {
                 if (Mode.EXAMPLE.equals(mode) && printInput) {
                     System.out.print(line + " ");
                 }
+
                 if (step == 1) {
                     doWorkOnLineStep1(line);
                 } else if (step == 2) {
                     doWorkOnLineStep2(line);
                 }
+
+                lineIdx++;
 
                 if (Mode.EXAMPLE.equals(mode) && printInput) {
                     System.out.println();
